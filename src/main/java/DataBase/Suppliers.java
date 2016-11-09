@@ -12,13 +12,6 @@ public class Suppliers {
     public Suppliers() {
     }
 
-    public Suppliers(int supplier_id, int shop_id, String sup_name, String sup_address) {
-        this.supplier_id = supplier_id;
-        this.shop_id = shop_id;
-        this.sup_name = sup_name;
-        this.sup_address = sup_address;
-    }
-
     public int getSupplier_id() {
         return supplier_id;
     }

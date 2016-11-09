@@ -13,14 +13,6 @@ public class Shops {
     public Shops() {
     }
 
-    public Shops(int shop_id, int goods_id, int yield, String shop_name, String shop_address) {
-        this.shop_id = shop_id;
-        this.goods_id = goods_id;
-        this.yield = yield;
-        this.shop_name = shop_name;
-        this.shop_address = shop_address;
-    }
-
     public int getShop_id() {
         return shop_id;
     }

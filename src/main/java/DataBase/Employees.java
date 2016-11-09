@@ -14,15 +14,6 @@ public class Employees {
     public Employees() {
     }
 
-    public Employees(int employee_id, int shop_id, int salary, String name, String surname, String job_name) {
-        this.employee_id = employee_id;
-        this.shop_id = shop_id;
-        this.salary = salary;
-        this.name = name;
-        this.surname = surname;
-        this.job_name = job_name;
-    }
-
     public int getEmployee_id() {
         return employee_id;
     }

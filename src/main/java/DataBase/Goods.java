@@ -13,14 +13,6 @@ public class Goods {
     public Goods() {
     }
 
-    public Goods(int goods_id, int supplier_id, int customer_id, String goods_name, String groupname) {
-        this.goods_id = goods_id;
-        this.supplier_id = supplier_id;
-        this.customer_id = customer_id;
-        this.goods_name = goods_name;
-        this.groupname = groupname;
-    }
-
     public int getGoods_id() {
         return goods_id;
     }

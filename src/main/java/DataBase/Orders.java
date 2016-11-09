@@ -15,16 +15,6 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(int order_id, int shop_id, int customer_id, int employee_id, int price, Date order_date) {
-
-        this.order_id = order_id;
-        this.shop_id = shop_id;
-        this.customer_id = customer_id;
-        this.employee_id = employee_id;
-        this.price = price;
-        this.order_date = order_date;
-    }
-
     public Date getOrder_date() {
         return order_date;
     }

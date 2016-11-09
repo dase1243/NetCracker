@@ -11,23 +11,15 @@ public class Customers {
     private String surname;
     private Date red_date;
 
+    public Customers() {
+    }
+
     public void getFullName() {
         System.out.println(this.name + " " + this.surname);
     }
 
     public int getCustomer_id() {
         return customer_id;
-    }
-
-    public Customers() {
-    }
-
-    public Customers(int customer_id, String name, String surname, Date red_date) {
-
-        this.customer_id = customer_id;
-        this.name = name;
-        this.surname = surname;
-        this.red_date = red_date;
     }
 
     public void setCustomer_id(int customer_id) {
