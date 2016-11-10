@@ -1,14 +1,23 @@
 package DataBase;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by dreikaa on 11/9/16.
  */
+@Entity
+@Table(name = "customers")
 public class Customers {
+    @Id
+    @Column(name= "customer_id")
     private int customer_id;
+    @Column(name= "name")
     private String name;
+    @Column(name= "surname")
     private String surname;
+    @Column(name= "red_date")
+    @Temporal(value= TemporalType.DATE)
     private Date red_date;
 
     public Customers() {

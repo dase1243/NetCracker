@@ -1,12 +1,22 @@
 package DataBase;
 
+import javax.persistence.*;
+
 /**
  * Created by dreikaa on 11/9/16.
  */
+@Entity
+@Table(name = "suppliers")
 public class Suppliers {
+    @Id
+    @Column(name = "supplier_id")
     private int supplier_id;
+    @Column(name = "shop_id")
+    @OneToMany
     private int shop_id;
+    @Column(name = "sup_name")
     private String sup_name;
+    @Column(name = "sup_address")
     private String sup_address;
 
     public Suppliers() {

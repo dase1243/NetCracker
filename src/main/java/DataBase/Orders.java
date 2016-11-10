@@ -1,15 +1,25 @@
 package DataBase;
 
+
 import java.util.Date;
+import javax.persistence.*;
 
 /**
  * Created by dreikaa on 11/9/16.
  */
+@Entity
+@Table(name = "orders")
 public class Orders {
+    @Id
+    @Column(name = "order_id")
     private int order_id;
+    @Column(name = "shop_id")
     private int shop_id;
+    @Column(name = "customer_id")
     private int customer_id;
+    @Column(name = "employee_id")
     private int employee_id;
+    @Column(name = "price")
     private int price;
 
     public Orders() {

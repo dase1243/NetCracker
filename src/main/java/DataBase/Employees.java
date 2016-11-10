@@ -1,14 +1,28 @@
 package DataBase;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Created by dreikaa on 11/9/16.
  */
+@Entity
+@Table(name = "employees")
 public class Employees {
+    @Id
+    @Column(name = "employee_id")
     private int employee_id;
+    @Column(name = "shop_id")
     private int shop_id;
+    @Column(name = "salary")
     private int salary;
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
     private String surname;
+    @Column(name = "job_name")
     private String job_name;
 
     public Employees() {
