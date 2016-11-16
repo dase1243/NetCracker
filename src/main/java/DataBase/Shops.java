@@ -1,6 +1,8 @@
 package DataBase;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by dreikaa on 11/9/16.
@@ -13,7 +15,7 @@ public class Shops {
     private int shop_id;
     @Column(name = "goods_id")
     @ManyToMany
-    private int goods_id;
+    private Set<Goods> goods_id = new HashSet<Goods>();
     @Column(name = "yield")
     private int yield;
     @Column(name = "shop_name")
@@ -32,11 +34,11 @@ public class Shops {
         this.shop_id = shop_id;
     }
 
-    public int getGoods_id() {
+    public Set<Goods> getGoods_id() {
         return goods_id;
     }
 
-    public void setGoods_id(int goods_id) {
+    public void setGoods_id(Set<Goods> goods_id) {
         this.goods_id = goods_id;
     }
 

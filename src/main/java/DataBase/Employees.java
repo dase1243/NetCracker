@@ -1,9 +1,8 @@
 package DataBase;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by dreikaa on 11/9/16.
@@ -15,7 +14,8 @@ public class Employees {
     @Column(name = "employee_id")
     private int employee_id;
     @Column(name = "shop_id")
-    private int shop_id;
+    @OneToMany
+    private Set<Shops> shop_id = new HashSet<Shops>();
     @Column(name = "salary")
     private int salary;
     @Column(name = "name")
@@ -36,11 +36,11 @@ public class Employees {
         this.employee_id = employee_id;
     }
 
-    public int getShop_id() {
+    public Set<Shops> getShop_id() {
         return shop_id;
     }
 
-    public void setShop_id(int shop_id) {
+    public void setShop_id(Set<Shops> shop_id) {
         this.shop_id = shop_id;
     }
 

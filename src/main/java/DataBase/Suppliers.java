@@ -12,7 +12,7 @@ public class Suppliers {
     @Column(name = "supplier_id")
     private int supplier_id;
     @Column(name = "shop_id")
-    @OneToMany
+    @ManyToMany
     private int shop_id;
     @Column(name = "sup_name")
     private String sup_name;

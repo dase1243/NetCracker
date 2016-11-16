@@ -12,7 +12,7 @@ public class Goods {
     @Column(name="goods_id")
     private int goods_id;
     @Column(name="supplier_id")
-    @OneToMany
+    @ManyToMany
     private int supplier_id;
     @Column(name="customer_id")
     private int customer_id;
