@@ -9,13 +9,13 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "employees")
-public class Employees {
+public class Employee {
     @Id
     @Column(name = "employee_id")
     private int employee_id;
     @Column(name = "shop_id")
     @OneToMany
-    private Set<Shops> shop_id = new HashSet<Shops>();
+    private Set<Shop> shop_id = new HashSet<Shop>();
     @Column(name = "salary")
     private int salary;
     @Column(name = "name")
@@ -25,7 +25,7 @@ public class Employees {
     @Column(name = "job_name")
     private String job_name;
 
-    public Employees() {
+    public Employee() {
     }
 
     public int getEmployee_id() {
@@ -36,11 +36,11 @@ public class Employees {
         this.employee_id = employee_id;
     }
 
-    public Set<Shops> getShop_id() {
+    public Set<Shop> getShop_id() {
         return shop_id;
     }
 
-    public void setShop_id(Set<Shops> shop_id) {
+    public void setShop_id(Set<Shop> shop_id) {
         this.shop_id = shop_id;
     }
 

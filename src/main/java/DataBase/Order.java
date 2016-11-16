@@ -9,7 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "orders")
-public class Orders {
+public class Order {
     @Id
     @Column(name = "order_id")
     private int order_id;
@@ -22,7 +22,7 @@ public class Orders {
     @Column(name = "price")
     private int price;
 
-    public Orders() {
+    public Order() {
     }
 
     public Date getOrder_date() {

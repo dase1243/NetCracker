@@ -7,7 +7,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "suppliers")
-public class Suppliers {
+public class Supplier {
     @Id
     @Column(name = "supplier_id")
     private int supplier_id;
@@ -19,7 +19,7 @@ public class Suppliers {
     @Column(name = "sup_address")
     private String sup_address;
 
-    public Suppliers() {
+    public Supplier() {
     }
 
     public int getSupplier_id() {

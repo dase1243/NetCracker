@@ -8,7 +8,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "customers")
-public class Customers {
+public class Customer {
     @Id
     @Column(name= "customer_id")
     private int customer_id;
@@ -20,7 +20,7 @@ public class Customers {
     @Temporal(value= TemporalType.DATE)
     private Date red_date;
 
-    public Customers() {
+    public Customer() {
     }
 
     public void getFullName() {

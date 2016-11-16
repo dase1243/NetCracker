@@ -7,29 +7,29 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "goods")
-public class Goods {
+public class Good {
     @Id
     @Column(name="goods_id")
-    private int goods_id;
+    private int good_id;
     @Column(name="supplier_id")
     @ManyToMany
     private int supplier_id;
     @Column(name="customer_id")
     private int customer_id;
     @Column(name="goods_name")
-    private String goods_name;
+    private String good_name;
     @Column(name="groupname")
     private String groupname;
 
-    public Goods() {
+    public Good() {
     }
 
-    public int getGoods_id() {
-        return goods_id;
+    public int getGood_id() {
+        return good_id;
     }
 
-    public void setGoods_id(int goods_id) {
-        this.goods_id = goods_id;
+    public void setGood_id(int good_id) {
+        this.good_id = good_id;
     }
 
     public int getSupplier_id() {
@@ -48,12 +48,12 @@ public class Goods {
         this.customer_id = customer_id;
     }
 
-    public String getGoods_name() {
-        return goods_name;
+    public String getGood_name() {
+        return good_name;
     }
 
-    public void setGoods_name(String goods_name) {
-        this.goods_name = goods_name;
+    public void setGood_name(String good_name) {
+        this.good_name = good_name;
     }
 
     public String getGroupname() {

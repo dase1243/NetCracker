@@ -9,13 +9,13 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "shops")
-public class Shops {
+public class Shop {
     @Id
     @Column(name = "shop_id")
     private int shop_id;
     @Column(name = "goods_id")
     @ManyToMany
-    private Set<Goods> goods_id = new HashSet<Goods>();
+    private Set<Good> good_id = new HashSet<Good>();
     @Column(name = "yield")
     private int yield;
     @Column(name = "shop_name")
@@ -23,7 +23,7 @@ public class Shops {
     @Column(name = "shop_address")
     private String shop_address;
 
-    public Shops() {
+    public Shop() {
     }
 
     public int getShop_id() {
@@ -34,12 +34,12 @@ public class Shops {
         this.shop_id = shop_id;
     }
 
-    public Set<Goods> getGoods_id() {
-        return goods_id;
+    public Set<Good> getGood_id() {
+        return good_id;
     }
 
-    public void setGoods_id(Set<Goods> goods_id) {
-        this.goods_id = goods_id;
+    public void setGood_id(Set<Good> good_id) {
+        this.good_id = good_id;
     }
 
     public int getYield() {
