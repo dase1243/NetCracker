@@ -10,8 +10,12 @@ import java.util.Collection;
  */
 public interface CustomerDAO {
     public void addCustomer(Customer customer) throws SQLException;
+
     public void updateCustomer(Customer customer) throws SQLException;
+
     public Customer getCustomerById(Long id) throws SQLException;
+
     public Collection<Customer> getAllCustomers() throws SQLException;
+
     public void deleteCustomer(Customer customer) throws SQLException;
 }

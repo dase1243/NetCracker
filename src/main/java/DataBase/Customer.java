@@ -10,14 +10,14 @@ import java.util.Date;
 @Table(name = "customers")
 public class Customer {
     @Id
-    @Column(name= "customer_id")
+    @Column(name = "customer_id")
     private int customer_id;
-    @Column(name= "name")
+    @Column(name = "name")
     private String name;
-    @Column(name= "surname")
+    @Column(name = "surname")
     private String surname;
-    @Column(name= "red_date")
-    @Temporal(value= TemporalType.DATE)
+    @Column(name = "red_date")
+    @Temporal(value = TemporalType.DATE)
     private Date red_date;
 
     public Customer() {

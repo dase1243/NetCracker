@@ -10,8 +10,12 @@ import java.util.Collection;
  */
 public interface EmployeeDAO {
     public void addEmployee(Employee employee) throws SQLException;
+
     public void updateEmployee(Employee employee) throws SQLException;
+
     public Employee getEmployeeById(Long id) throws SQLException;
+
     public Collection<Employee> getAllEmployeess() throws SQLException;
+
     public void deleteEmployee(Employee employee) throws SQLException;
 }

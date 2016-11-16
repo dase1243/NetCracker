@@ -10,8 +10,12 @@ import java.util.Collection;
  */
 public interface ShopDAO {
     public void addShop(Shop shop) throws SQLException;
+
     public void updateShop(Shop shop) throws SQLException;
+
     public Shop getShopById(Long id) throws SQLException;
+
     public Collection<Shop> getAllSuppliers() throws SQLException;
+
     public void deleteShop(Shop shop) throws SQLException;
 }

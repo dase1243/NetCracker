@@ -9,16 +9,16 @@ import javax.persistence.*;
 @Table(name = "goods")
 public class Good {
     @Id
-    @Column(name="goods_id")
+    @Column(name = "goods_id")
     private int good_id;
-    @Column(name="supplier_id")
+    @Column(name = "supplier_id")
     @ManyToMany
     private int supplier_id;
-    @Column(name="customer_id")
+    @Column(name = "customer_id")
     private int customer_id;
-    @Column(name="goods_name")
+    @Column(name = "goods_name")
     private String good_name;
-    @Column(name="groupname")
+    @Column(name = "groupname")
     private String groupname;
 
     public Good() {

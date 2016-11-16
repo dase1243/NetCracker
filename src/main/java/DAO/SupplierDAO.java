@@ -10,8 +10,12 @@ import java.util.Collection;
  */
 public interface SupplierDAO {
     public void addSupplier(Supplier supplier) throws SQLException;
+
     public void updateSupplier(Supplier supplier) throws SQLException;
+
     public Supplier getSupplierById(Long id) throws SQLException;
+
     public Collection<Supplier> getAllSuppliers() throws SQLException;
+
     public void deleteSupplier(Supplier supplier) throws SQLException;
 }
