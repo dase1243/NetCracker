@@ -25,6 +25,11 @@ public class Zeidel {
         mass = createMass(a);
         double[] k;
         double[] k1 = new double[mass.length + 1];
+        k = findCoeff(mass);
+//        for (int i = 0; i < k.length; i++) {
+//            k1[i] = k[k.length - i - 1];
+//            System.out.println(k1[i]);
+//        }
         System.out.println(convergence(mass));
 
 
@@ -365,11 +370,14 @@ public class Zeidel {
     }
 
     public static boolean convergence(double[][] mass) {
-        double[] k = new double[mass.length + 1];
+        double[] k;
         k = findCoeff(mass);
+
         Complex64F[] complex = findRoots(k);
+
         for (int i = 0; i < complex.length; i++) {
-            if (Math.pow((Math.pow(complex[i].getImaginary(), 2) + Math.pow(complex[i].getReal(), 2)), 0.5) > 1) {
+            System.out.println(complex[i].toString());
+            if(Math.pow(complex[i].getReal()*complex[i].getReal()+complex[i].getImaginary()*complex[i].getImaginary(),0.5)>1){
                 return false;
             }
         }
@@ -468,12 +476,11 @@ public class Zeidel {
                 }
             }
         }
+        k1 = new double[k.length];
         for (int i = 0; i < k.length; i++) {
-            k1[i] = k[k.length - i - 1];
-            System.out.println(k1[i]);
+            k1[i] = k[k.length-i-1];
         }
         return k1;
-
     }
 
     public static double[] Kplus(double[][] mass) { //положить мульты диагонали
@@ -504,6 +511,9 @@ public class Zeidel {
         for (int i = 0; i < k.length; i++) {
             k[i] *= -1;
         }
+//        for (int i = 0; i <k.length ; i++) {
+//            System.out.println(k[i]);
+//        }
         return k;
     }
 
