@@ -23,14 +23,20 @@ public class Zeidel {
     public static void main(String[] args) throws IOException {
         int a = Integer.parseInt(reader.readLine());
         mass = createMass(a);
+        for (int i = 0; i < mass.length; i++) {
+            for (int j = 0; j < mass[0].length; j++) {
+                System.out.print(mass[i][j] + " ");
+            }
+            System.out.println();
+        }
         double[] k;
         double[] k1 = new double[mass.length + 1];
-        k = findCoeff(mass);
-//        for (int i = 0; i < k.length; i++) {
-//            k1[i] = k[k.length - i - 1];
-//            System.out.println(k1[i]);
-//        }
-        System.out.println(convergence(mass));
+        k = findCoeffZeidel(mass);
+        for (int i = 0; i < k.length; i++) {
+            k1[i] = k[k.length - i - 1];
+            System.out.println(k1[i]);
+        }
+//        System.out.println(convergence(mass));
 
 
 //        x0 = new double[mass.length];
@@ -369,20 +375,36 @@ public class Zeidel {
         return C;
     }
 
-    public static boolean convergence(double[][] mass) {
+    public static boolean convergenceZeidel(double[][] mass) {
         double[] k;
-        k = findCoeff(mass);
+        k = findCoeffZeidel(mass);
 
         Complex64F[] complex = findRoots(k);
 
         for (int i = 0; i < complex.length; i++) {
             System.out.println(complex[i].toString());
-            if(Math.pow(complex[i].getReal()*complex[i].getReal()+complex[i].getImaginary()*complex[i].getImaginary(),0.5)>1){
+            if (Math.pow(complex[i].getReal() * complex[i].getReal() + complex[i].getImaginary() * complex[i].getImaginary(), 0.5) > 1) {
                 return false;
             }
         }
         return true;
     }
+
+    public static boolean convergenceJacoby(double[][] mass) {
+        double[] k;
+        k = findCoeffJacoby(mass);
+
+        Complex64F[] complex = findRoots(k);
+
+        for (int i = 0; i < complex.length; i++) {
+            System.out.println(complex[i].toString());
+            if (Math.pow(complex[i].getReal() * complex[i].getReal() + complex[i].getImaginary() * complex[i].getImaginary(), 0.5) > 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public static final double determinant(final double A[][]) {
         int n = A.length;
@@ -445,7 +467,7 @@ public class Zeidel {
         return D * B[row[n - 1]][n - 1];
     }
 
-    public static double[] findCoeff(double[][] mass) {//положить мульты диагонали
+    public static double[] findCoeffJacoby(double[][] mass) {//положить мульты диагонали
         double[] k = new double[mass.length + 1];
         double[] k1;
         if (mass.length % 2 != 0) {
@@ -478,7 +500,48 @@ public class Zeidel {
         }
         k1 = new double[k.length];
         for (int i = 0; i < k.length; i++) {
-            k1[i] = k[k.length-i-1];
+            k1[i] = k[k.length - i - 1];
+        }
+        return k1;
+    }
+
+    public static double[] findCoeffZeidel(double[][] mass) {//положить мульты диагонали
+        double[] k = new double[mass.length + 1];
+        double[] k1;
+        if (mass.length % 2 != 0) {
+            k1 = Kplus(mass);
+            k[0] = k1[0];
+            for (int i = 1; i < k1.length; i++) {
+                k[k.length - i - 1] = k1[i];
+            }
+
+            //(k.length + 1) / 2 - 1
+            // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+            k1 = Kminus(mass);
+            for (int i = 0; i < k1.length; i++) {
+                k[k.length - 1 - (k.length + 1) / 2] += k1[i];
+            }
+        } else {
+            k1 = Kplus(mass);
+            k[0] = k1[0];
+            for (int i = 1; i < k1.length; i++) {
+                k[k.length - i - 1] = k1[i];
+            }
+            k1 = Kminus(mass);
+            for (int i = 0; i < k1.length; i++) {
+                if (i % 2 != 0) {
+                    k[(k.length / 2) + 1] += k1[i];
+                }
+            }
+            for (int i = 0; i < k1.length; i++) {
+                if (i % 2 == 0) {
+                    k[k.length / 2] += k1[i];
+                }
+            }
+        }
+        k1 = new double[k.length];
+        for (int i = 0; i < k.length; i++) {
+            k1[i] = k[k.length - i - 1];
         }
         return k1;
     }
