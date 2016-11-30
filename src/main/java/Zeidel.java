@@ -1,5 +1,9 @@
 import Jama.EigenvalueDecomposition;
 import Jama.Matrix;
+import org.ejml.data.Complex64F;
+import org.ejml.data.DenseMatrix64F;
+import org.ejml.factory.DecompositionFactory;
+import org.ejml.interfaces.decomposition.EigenDecomposition;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,14 +23,10 @@ public class Zeidel {
     public static void main(String[] args) throws IOException {
         int a = Integer.parseInt(reader.readLine());
         mass = createMass(a);
-        double[] k = Kplus(mass);
-        for (int i = 0; i < k.length; i++) {
-            System.out.println(k[i]);
-        }
-        k = Kminus(mass);
-        for (int i = 0; i < k.length; i++) {
-            System.out.println(k[i]);
-        }
+        double[] k;
+        double[] k1 = new double[mass.length + 1];
+        System.out.println(convergence(mass));
+
 
 //        x0 = new double[mass.length];
 //        setX0();
@@ -78,8 +78,8 @@ public class Zeidel {
             }
         }
         System.out.println(determinant(mass));
-        mass1 = mass;
-        mass = multiply(mass, makeTran(mass1));
+//        mass1 = mass;
+//        mass = multiply(mass, makeTran(mass1));
         return mass;
     }
 
@@ -364,12 +364,16 @@ public class Zeidel {
         return C;
     }
 
-    public static void convergence(double[][] mass) {
-        if (determinant(mass) > 0) {
-            System.out.println("Yes");
-        } else {
-            System.out.println("No");
+    public static boolean convergence(double[][] mass) {
+        double[] k = new double[mass.length + 1];
+        k = findCoeff(mass);
+        Complex64F[] complex = findRoots(k);
+        for (int i = 0; i < complex.length; i++) {
+            if (Math.pow((Math.pow(complex[i].getImaginary(), 2) + Math.pow(complex[i].getReal(), 2)), 0.5) > 1) {
+                return false;
+            }
         }
+        return true;
     }
 
     public static final double determinant(final double A[][]) {
@@ -433,6 +437,45 @@ public class Zeidel {
         return D * B[row[n - 1]][n - 1];
     }
 
+    public static double[] findCoeff(double[][] mass) {//положить мульты диагонали
+        double[] k = new double[mass.length + 1];
+        double[] k1;
+        if (mass.length % 2 != 0) {
+            k1 = Kplus(mass);
+            k[0] = k1[0];
+            for (int i = 1; i < k1.length; i++) {
+                k[k.length - 1] += k1[i];
+            }
+            k1 = Kminus(mass);
+            for (int i = 0; i < k1.length; i++) {
+                k[k.length - 2] += k1[i];
+            }
+        } else {
+            k1 = Kplus(mass);
+            k[0] = k1[0];
+            for (int i = 1; i < k1.length; i++) {
+                k[k.length - 1] += k1[i];
+            }
+            k1 = Kminus(mass);
+            for (int i = 0; i < k1.length; i++) {
+                if (i % 2 != 0) {
+                    k[k.length - 2] += k1[i];
+                }
+            }
+            for (int i = 0; i < k1.length; i++) {
+                if (i % 2 == 0) {
+                    k[k.length - 1] += k1[i];
+                }
+            }
+        }
+        for (int i = 0; i < k.length; i++) {
+            k1[i] = k[k.length - i - 1];
+            System.out.println(k1[i]);
+        }
+        return k1;
+
+    }
+
     public static double[] Kplus(double[][] mass) { //положить мульты диагонали
         double[] k = new double[mass.length];
         for (int i = 0; i < mass.length; i++) {
@@ -440,10 +483,8 @@ public class Zeidel {
             for (int j = 0; j < mass.length; j++) {
                 if (i + j >= mass.length) {
                     mult *= mass[j][j + i - mass.length];
-                    System.out.println(mass[j][j + i - mass.length]);
                 } else {
                     mult *= mass[j][j + i];
-                    System.out.println(mass[j][j + i]);
                 }
             }
             k[i] = mult;
@@ -452,7 +493,7 @@ public class Zeidel {
     }
 
     public static double[] Kminus(double[][] mass) { //положить мульты диагонали зеркальной
-        double[] k = new double[mass.length];
+        double[] k;
         double[][] mass1 = new double[mass.length][mass.length];
         for (int i = 0; i < mass1.length; i++) {
             for (int j = 0; j < mass1.length; j++) {
@@ -460,7 +501,38 @@ public class Zeidel {
             }
         }
         k = Kplus(mass1);
+        for (int i = 0; i < k.length; i++) {
+            k[i] *= -1;
+        }
         return k;
+    }
+
+    public static Complex64F[] findRoots(double... coefficients) {
+        int N = coefficients.length - 1;
+
+        // Construct the companion matrix
+        DenseMatrix64F c = new DenseMatrix64F(N, N);
+
+        double a = coefficients[N];
+        for (int i = 0; i < N; i++) {
+            c.set(i, N - 1, -coefficients[i] / a);
+        }
+        for (int i = 1; i < N; i++) {
+            c.set(i, i - 1, 1);
+        }
+
+        // use generalized eigenvalue decomposition to find the roots
+        EigenDecomposition<DenseMatrix64F> evd = DecompositionFactory.eig(N, false);
+
+        evd.decompose(c);
+
+        Complex64F[] roots = new Complex64F[N];
+
+        for (int i = 0; i < N; i++) {
+            roots[i] = evd.getEigenvalue(i);
+        }
+
+        return roots;
     }
 
 }
