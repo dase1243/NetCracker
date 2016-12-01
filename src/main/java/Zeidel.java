@@ -31,35 +31,22 @@ public class Zeidel {
         }
         double[] k;
         double[] k1 = new double[mass.length + 1];
-        k = findCoeffZeidel(mass);
+        k = findCoeffJacoby(mass);
         for (int i = 0; i < k.length; i++) {
             k1[i] = k[k.length - i - 1];
             System.out.println(k1[i]);
         }
+        Complex64F[] k2 = findRoots(k);
+        for (int i = 0; i < k2.length; i++) {
+            System.out.println(k2[i]);
+        }
 //        System.out.println(convergence(mass));
-
-
-//        x0 = new double[mass.length];
-//        setX0();
-//        f = new double[mass.length];
-//        setF0();
-//        System.out.println(thirdNorm(mass));
-//        for (int i = 0; i < 100; i++) {
-//            nextItter(x0, mass, f);
-//        }
-//        // nextItter(x0, mass, f);
-//        for (int i = 0; i < x0.length; i++) {
-//            System.out.println(x0[i]);
-//        }
-//        System.out.println(secondNorm(mass));
-//        mass = makeSim(mass);
-//        setNorm(2);
-//        for (int i = 0; i < mass.length; i++) {
-//            for (int j = 0; j < mass[1].length; j++) {
-//                System.out.print(mass[i][j] + " ");
-//            }
-//            System.out.println();
-//        }
+        x0 = new double[mass.length];
+        setX0();
+        f = new double[mass.length];
+        setF0();
+        System.out.println(thirdNorm(mass));
+        nextItterJacoby(x0, mass, f);
     }
 
     private static void setX0() throws IOException {
@@ -90,7 +77,7 @@ public class Zeidel {
         }
         System.out.println(determinant(mass));
 //        mass1 = mass;
-//        mass = multiply(mass, makeTran(mass1));
+//        mass = multiply(makeTran(mass1), mass);
         return mass;
     }
 
@@ -121,10 +108,6 @@ public class Zeidel {
             }
         }
         return massSim;
-    }
-
-    public static double countNorm() {
-        return 0;
     }
 
     public static double firstNorm(double[][] mass) {
@@ -180,7 +163,29 @@ public class Zeidel {
         norm = a;
     }
 
-    public static void nextItter(double[] x0, double[][] mass, double[] f) {
+    public static double[] Jacoby(double[][] mass, int n) throws IOException {
+        if (convergenceZeidel(mass)) {
+            System.out.println("Not convergences");
+            return null;
+        }
+        setX0();
+        if (x0.length != mass.length) {
+            System.out.println("Wrong x0");
+            return null;
+        }
+        setF0();
+        if (f.length != mass.length) {
+            System.out.println("Wrong f0");
+            return null;
+        }
+        for (int i = 0; i < n; i++) {
+            nextItterJacoby(x0, mass, f);
+        }
+        return x0;
+    }
+
+
+    public static void nextItterJacoby(double[] x0, double[][] mass, double[] f) {
         if (x0.length != mass.length) {
             Zeidel.x0 = x0;
         }
@@ -201,6 +206,67 @@ public class Zeidel {
             }
         }
 
+        makeUDL(mass, massu, massd, massl);
+
+        invert(matrixSum(massl, massd));
+        massRes = multiply(massl, massf);
+        matrixTimes(massl, -1);
+        massl = multiply(massl, massu);
+        massl = multiply(massl, massx0);
+        matrixSum(massl, massRes);
+
+        System.out.println();
+        for (int i = 0; i < massl.length; i++) {
+            for (int j = 0; j < 1; j++) {
+                x0[i] = massl[i][j];
+            }
+        }
+
+        Zeidel.x0 = x0;
+    }
+
+    public static void nextItterZeidel(double[] x0, double[][] mass, double[] f) {
+        if (x0.length != mass.length) {
+            Zeidel.x0 = x0;
+        }
+        double[][] massl = new double[mass.length][mass[0].length];
+        double[][] massd = new double[mass.length][mass[0].length];
+        double[][] massu = new double[mass.length][mass[0].length];
+        double[][] massx0 = new double[mass.length][mass[0].length];
+        double[][] massf = new double[mass.length][mass[0].length];
+        double[][] massRes;
+        for (int i = 0; i < mass.length; i++) {
+            for (int j = 0; j < 1; j++) {
+                massx0[i][j] = x0[i];
+            }
+        }
+        for (int i = 0; i < mass.length; i++) {
+            for (int j = 0; j < 1; j++) {
+                massf[i][j] = f[i];
+            }
+        }
+
+        makeUDL(mass, massu, massd, massl);
+
+        invert(massd);
+        matrixSum(massl, massu);
+        massRes = multiply(massl, massd);
+        matrixTimes(massRes, -1);
+        massRes = multiply(massRes, massx0);
+        massd = multiply(massd, massf);
+        massRes = matrixSum(massRes, massd);
+
+        System.out.println();
+        for (int i = 0; i < massRes.length; i++) {
+            for (int j = 0; j < 1; j++) {
+                x0[i] = massRes[i][j];
+            }
+        }
+
+        Zeidel.x0 = x0;
+    }
+
+    public static void makeUDL(double[][] mass, double[][] massu, double[][] massd, double[][] massl) {
         for (int i = 0; i < mass.length; i++) {
             for (int j = 0; j < mass[0].length; j++) {
                 if (i == j) {
@@ -214,52 +280,6 @@ public class Zeidel {
                 }
             }
         }
-
-        System.out.println();
-        for (int i = 0; i < massu.length; i++) {
-            for (int j = 0; j < massu[1].length; j++) {
-                System.out.print(massu[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        for (int i = 0; i < massd.length; i++) {
-            for (int j = 0; j < massd[1].length; j++) {
-                System.out.print(massd[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        for (int i = 0; i < massl.length; i++) {
-            for (int j = 0; j < massl[1].length; j++) {
-                System.out.print(massl[i][j] + " ");
-            }
-            System.out.println();
-        }
-        System.out.println();
-        for (int i = 0; i < massl.length; i++) {
-            for (int j = 0; j < massl[1].length; j++) {
-                System.out.print(mass[i][j] + " ");
-            }
-            System.out.println();
-        }
-
-        invert(matrixSum(massl, massd));
-        massRes = multiply(massl, massf);
-        matrixTimes(massl, -1);
-        massl = multiply(massl, massu);
-        massl = multiply(massl, massx0);
-        matrixSum(massl, massRes);
-
-
-        System.out.println();
-        for (int i = 0; i < massl.length; i++) {
-            for (int j = 0; j < 1; j++) {
-                x0[i] = massl[i][j];
-            }
-        }
-
-        Zeidel.x0 = x0;
     }
 
     public static double[][] matrixTimes(double[][] mass, double d) {
