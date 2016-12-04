@@ -32,14 +32,21 @@ public class Zeidel {
         double[] k;
         double[] k1 = new double[mass.length + 1];
         k = findCoeffJacoby(mass);
+        System.out.println();
         for (int i = 0; i < k.length; i++) {
             k1[i] = k[k.length - i - 1];
             System.out.println(k1[i]);
         }
-        Complex64F[] k2 = findRoots(k);
-        for (int i = 0; i < k2.length; i++) {
-            System.out.println(k2[i]);
+        k = findCoeffZeidel(mass);
+        System.out.println();
+        for (int i = 0; i < k.length; i++) {
+            k1[i] = k[k.length - i - 1];
+            System.out.println(k1[i]);
         }
+//        Complex64F[] k2 = findRoots(k);
+//        for (int i = 0; i < k2.length; i++) {
+//            System.out.println(k2[i]);
+//        }
 //        System.out.println(convergence(mass));
         x0 = new double[mass.length];
         setX0();
@@ -494,7 +501,7 @@ public class Zeidel {
             k1 = Kplus(mass);
             k[0] = k1[0];
             for (int i = 1; i < k1.length; i++) {
-                k[k.length - 1] += k1[i];
+                k[k.length - 1] += k1[i]; ///1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
             }
             k1 = Kminus(mass);
             for (int i = 0; i < k1.length; i++) {
@@ -509,7 +516,7 @@ public class Zeidel {
             k1 = Kminus(mass);
             for (int i = 0; i < k1.length; i++) {
                 if (i % 2 != 0) {
-                    k[k.length - 2] += k1[i];
+                    k[k.length - 3] += k1[i];
                 }
             }
             for (int i = 0; i < k1.length; i++) {
@@ -517,6 +524,19 @@ public class Zeidel {
                     k[k.length - 1] += k1[i];
                 }
             }
+        }
+        if (k1.length == 1) {
+            for (int i = 0; i < k.length; i++) {
+                k[i] = 0;
+            }
+            k[0] = mass[0][0];
+        }
+        if (mass.length == 2) {
+            for (int i = 0; i < k.length; i++) {
+                k[i] = 0;
+            }
+            k[0] = mass[0][0] * mass[1][1];
+            k[1] = -1 * mass[0][1] * mass[1][0];
         }
         k1 = new double[k.length];
         for (int i = 0; i < k.length; i++) {
@@ -550,15 +570,29 @@ public class Zeidel {
             k1 = Kminus(mass);
             for (int i = 0; i < k1.length; i++) {
                 if (i % 2 != 0) {
-                    k[(k.length / 2) + 1] += k1[i];
+                    k[(k1.length / 2) - 1] += k1[i];
                 }
             }
             for (int i = 0; i < k1.length; i++) {
                 if (i % 2 == 0) {
-                    k[k.length / 2] += k1[i];
+                    k[k1.length / 2] += k1[i];
                 }
             }
         }
+        if (mass.length == 1) {
+            for (int i = 0; i < k.length; i++) {
+                k[i] = 0;
+            }
+            k[0] = mass[0][0];
+        }
+        if (mass.length == 2) {
+            for (int i = 0; i < k.length; i++) {
+                k[i] = 0;
+            }
+            k[0] = mass[0][0] * mass[1][1];
+            k[2] = -1 * mass[0][1] * mass[1][0];
+        }
+
         k1 = new double[k.length];
         for (int i = 0; i < k.length; i++) {
             k1[i] = k[k.length - i - 1];
