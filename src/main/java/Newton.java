@@ -16,6 +16,9 @@ public class Newton {
     public static double[] a = {0, 0};
     public static double[] x0 = {0, 0};
     public static double[] f = {0, 0};
+    public static double A;
+    public static double B;
+    public static double C;
     public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) throws IOException {
@@ -26,8 +29,19 @@ public class Newton {
         invertMassJ(); //обратный якобиан
         //toString(massf.get(0));
         writeNewton();
-        nextItter();
-        System.out.println(a[0] + " " + a[1]);
+        findABC();
+        if (convergence()){
+            for (int i = 0; i < 10; i++) {
+                nextItter();
+            }
+        }
+    }
+
+    public static boolean convergence() {
+        if (A * B * C * 2 * 2 > 1) {
+            return true;
+        }
+        return false;
     }
 
     public static double[] createMass() throws IOException { // создание массива коэффициентов системы
@@ -116,6 +130,52 @@ public class Newton {
 
     }
 
+    public static void findA() {
+        double[][] massJ = new double[2][2];
+        massJ[0][0] = invertMassJ.get(0)[0] * a[0] * a[0] + invertMassJ.get(0)[1] * a[0] + invertMassJ.get(0)[2] *
+                a[1] * a[1] + invertMassJ.get(0)[3] * a[1] + invertMassJ.get(0)[4];
+
+        massJ[0][1] = invertMassJ.get(1)[0] * a[0] * a[0] + invertMassJ.get(1)[1] * a[0] + invertMassJ.get(1)[2] *
+                a[1] * a[1] + invertMassJ.get(1)[3] * a[1] + invertMassJ.get(1)[4];
+
+        massJ[1][0] = invertMassJ.get(2)[0] * a[0] * a[0] + invertMassJ.get(2)[1] * a[0] + invertMassJ.get(2)[2] *
+                a[1] * a[1] + invertMassJ.get(2)[3] * a[1] + invertMassJ.get(2)[4];
+
+        massJ[1][1] = invertMassJ.get(3)[0] * a[0] * a[0] + invertMassJ.get(3)[1] * a[0] + invertMassJ.get(3)[2] *
+                a[1] * a[1] + invertMassJ.get(3)[3] * a[1] + invertMassJ.get(3)[4];
+
+        A = MatFunc.firstNorm(massJ);
+    }
+
+    public static void findABC() {
+        double[][] massJ0 = new double[2][2];
+        massJ0[0][0] = invertMassJ.get(0)[0] * a[0] * a[0] + invertMassJ.get(0)[1] * a[0] + invertMassJ.get(0)[2] *
+                a[1] * a[1] + invertMassJ.get(0)[3] * a[1] + invertMassJ.get(0)[4];
+
+        massJ0[0][1] = invertMassJ.get(1)[0] * a[0] * a[0] + invertMassJ.get(1)[1] * a[0] + invertMassJ.get(1)[2] *
+                a[1] * a[1] + invertMassJ.get(1)[3] * a[1] + invertMassJ.get(1)[4];
+
+        massJ0[1][0] = invertMassJ.get(2)[0] * a[0] * a[0] + invertMassJ.get(2)[1] * a[0] + invertMassJ.get(2)[2] *
+                a[1] * a[1] + invertMassJ.get(2)[3] * a[1] + invertMassJ.get(2)[4];
+
+        massJ0[1][1] = invertMassJ.get(3)[0] * a[0] * a[0] + invertMassJ.get(3)[1] * a[0] + invertMassJ.get(3)[2] *
+                a[1] * a[1] + invertMassJ.get(3)[3] * a[1] + invertMassJ.get(3)[4];
+
+        double[][] massF = new double[2][2];
+        massF[0][0] = massf.get(0)[0] * a[0] * a[0] + massf.get(0)[1] * a[0] + massf.get(0)[2] *
+                a[1] * a[1] + massf.get(0)[3] * a[1] + massf.get(0)[4];
+        massF[1][0] = massf.get(1)[0] * a[0] * a[0] + massf.get(1)[1] * a[0] + massf.get(1)[2] *
+                a[1] * a[1] + massf.get(1)[3] * a[1] + massf.get(1)[4];
+        massF[0][1] = 0;
+        massF[1][1] = 0;
+
+
+        A = MatFunc.firstNorm(massJ0);
+        massF = MatFunc.multiply(massJ0, massF);
+        B = MatFunc.firstNorm(massF);
+        C = Math.max(Math.max(Math.max(massJ.get(0)[1], massJ.get(1)[3]), massJ.get(2)[1]), massJ.get(3)[3]);
+    }
+
     public static void invertMassJ() throws IOException { //задание массива массивов коэффициентов производных
         invertMassJ.add(0, massJ.get(3));
         invertMassJ.add(1, MatFunc.matrixTimes(massJ.get(1), -1));
@@ -126,7 +186,7 @@ public class Newton {
     public static void nextItter() {
         f[0] = massf.get(0)[0] * a[0] * a[0] + massf.get(0)[1] * a[0] + massf.get(0)[2] *
                 a[1] * a[1] + massf.get(0)[3] * a[1] + massf.get(0)[4];
-        f[1] = massf.get(1)[0] * a[0] * a[0] + massJ.get(1)[1] * a[0] + massf.get(1)[2] *
+        f[1] = massf.get(1)[0] * a[0] * a[0] + massf.get(1)[1] * a[0] + massf.get(1)[2] *
                 a[1] * a[1] + massf.get(1)[3] * a[1] + massf.get(1)[4];
 
         for (int i = 0; i < massJ.size(); i++) {
