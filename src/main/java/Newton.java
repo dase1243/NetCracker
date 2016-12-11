@@ -10,17 +10,24 @@ public class Newton {
     public static ArrayList<double[]> massf = new ArrayList<>();
     public static ArrayList<double[]> massJ = new ArrayList<>();
     public static ArrayList<double[]> invertMassJ = new ArrayList<>();
+    public static double[] massJa = {0, 0, 0, 0};
+    public static double[] invertMassJa = {0, 0, 0, 0};
+    public static double detInvertJ = 1;
+    public static double[] a = {0, 0};
     public static double[] x0 = {0, 0};
     public static double[] f = {0, 0};
     public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) throws IOException {
+        System.out.println((double) 1 / 3);
         massf.add(createMass());
         massf.add(createMass()); // задаем уравнения системы
         createMassJ(); //ищем якобиан
         invertMassJ(); //обратный якобиан
         //toString(massf.get(0));
         writeNewton();
+        nextItter();
+        System.out.println(a[0] + " " + a[1]);
     }
 
     public static double[] createMass() throws IOException { // создание массива коэффициентов системы
@@ -116,8 +123,26 @@ public class Newton {
         invertMassJ.add(3, massJ.get(0));
     }
 
-    public static void nextItter(){
+    public static void nextItter() {
+        f[0] = massf.get(0)[0] * a[0] * a[0] + massf.get(0)[1] * a[0] + massf.get(0)[2] *
+                a[1] * a[1] + massf.get(0)[3] * a[1] + massf.get(0)[4];
+        f[1] = massf.get(1)[0] * a[0] * a[0] + massJ.get(1)[1] * a[0] + massf.get(1)[2] *
+                a[1] * a[1] + massf.get(1)[3] * a[1] + massf.get(1)[4];
 
+        for (int i = 0; i < massJ.size(); i++) {
+            massJa[i] = massJ.get(i)[0] * a[0] * a[0] + massJ.get(i)[1] * a[0] + massJ.get(i)[2] *
+                    a[1] * a[1] + massJ.get(i)[3] * a[1] + massJ.get(i)[4];
+        }
+
+        for (int i = 0; i < invertMassJ.size(); i++) {
+            invertMassJa[i] = invertMassJ.get(i)[0] * a[0] * a[0] + invertMassJ.get(i)[1] * a[0] + invertMassJ.get(i)[2] *
+                    a[1] * a[1] + invertMassJ.get(i)[3] * a[1] + invertMassJ.get(i)[4];
+        }
+
+        detInvertJ = 1 / (invertMassJa[0] * invertMassJa[3] - invertMassJa[1] * invertMassJa[2]);
+        System.out.println(detInvertJ);
+        a[0] = a[0] - (invertMassJa[0] * f[0] + invertMassJa[1] * f[1]) * detInvertJ;
+        a[1] = a[1] - (invertMassJa[2] * f[0] + invertMassJa[3] * f[1]) * detInvertJ;
     }
 
     public static void createMassJ() throws IOException { //задание массива массивов коэффициентов производных
