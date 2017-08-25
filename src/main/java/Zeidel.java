@@ -35,17 +35,18 @@ public class Zeidel {
         for (int i = 0; i < k1.length; i++) {
             System.out.println(k1[i]);
         }
-        System.out.println();
-        k1 = findCoeffJacoby(mass);
-        for (int i = 0; i < k1.length; i++) {
-            System.out.println(k1[i]);
-        }
-        System.out.println();
+//        System.out.println();
+//        k1 = findCoeffJacoby(mass);
+//        for (int i = 0; i < k1.length; i++) {
+//            System.out.println(k1[i]);
+//        }
+//        System.out.println();
 
-        double[] x = Zeidel(mass, 100);
-        for (int i = 0; i < x.length; i++) {
-            System.out.println(x[i]);
-        }
+//        double[] x = Zeidel(mass, 100);
+//        for (int i = 0; i < x.length; i++) {
+//            System.out.println(x[i]);
+//        }
+
 
 //        k = findCoeffJacoby(mass);
 //        System.out.println();
@@ -277,10 +278,19 @@ public class Zeidel {
             k1 = Kplus(mass);
             k[0] = k1[0];
             for (int i = 1; i < k1.length; i++) {
-                k[k.length - 1] += k1[i]; ///1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+                if (i == k1.length - 1) {
+                    k[1] =+ k1[i];
+                } else {
+                    k[k.length - 1] += k1[i]; ///1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+                }
             }
             k1 = Kminus(mass);
             for (int i = 0; i < k1.length; i++) {
+                if(i==k1.length-2){
+                    k[k.length - 3]+=k1[i];
+                }
+
+
                 k[k.length - 2] += k1[i];
             }
         } else {
